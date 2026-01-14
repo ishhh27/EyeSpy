@@ -22,15 +22,13 @@ Computer Vision: OpenCV, PyTesseract<br>
 APIs and Tools: OSINT sources, search engines<br>
 Database: SQL / MySQL
 
-How It Works
+How It Works:<br>
 Image uploaded → Image analysis and metadata extraction → AI-based processing → Intelligence generated → Structured output.
 
-Impact
+Impact:<br>
 Speeds up investigations by converting raw images into meaningful intelligence with minimal human effort.
 
-Contributor
+Contributors:<br>
 Isha Joshi, Harshita Joshi, Ishani Sharma and Khushi Kanwar
 
-License
-
-MIT License
+License: MIT License
