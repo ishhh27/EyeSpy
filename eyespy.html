@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EYESPY - Advanced Image Intelligence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #0099cc;
+            --accent-color: #ff00ff;
+            --dark-bg: #0a0e27;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --neon-blue: #00d4ff;
+            --neon-purple: #ff00ff;
+            --neon-pink: #ff00aa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27, #1a237e, #0d47a1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animated background elements */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 212, 255, 0.1);
+            animation: move 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        .bg-animation span:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation span:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .bg-animation span:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .bg-animation span:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .bg-animation span:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation span:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .bg-animation span:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        .bg-animation span:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+
+        .bg-animation span:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .bg-animation span:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 50%;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        /* Subtle neon text effect for front page only */
+        .neon-title {
+            color: var(--neon-blue);
+            text-shadow: 
+                0 0 5px rgba(0, 212, 255, 0.5),
+                0 0 10px rgba(0, 212, 255, 0.3),
+                0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Splash Screen Styles */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0e27, #1a237e, #0d47a1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .splash-logo {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .splash-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            letter-spacing: 3px;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        .splash-loader {
+            width: 100px;
+            height: 100px;
+            border: 8px solid rgba(255, 255, 255, 0.2);
+            border-top-color: var(--neon-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .team-credit {
+            position: absolute;
+            bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Main App Styles */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .app-header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+       .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            width: 200px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(90deg, #b0174f, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            color: var(--neon-blue);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-menu-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .user-menu-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            min-width: 200px;
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: background 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .dropdown-item.danger {
+            color: var(--danger-color);
+        }
+
+        .dropdown-item.danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: rgba(148, 163, 184, 0.2);
+            margin: 0.5rem 0;
+        }
+
+        /* Authentication Styles */
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--neon-blue);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 6px;
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            width: 100%;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: none;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+            width: 100%;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-switch a {
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .forgot-password a {
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--success-color);
+            text-align: center;
+        }
+
+        /* Avatar Creation Styles */
+        .avatar-creation {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        .avatar-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .avatar-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--neon-blue);
+        }
+
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.5);
+        }
+
+        .avatar-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-option {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-option:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--neon-blue);
+            transform: translateY(-5px);
+        }
+
+        .avatar-option.selected {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .avatar-option i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--neon-blue);
+        }
+
+        /* Main Interface Styles */
+        .main-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        .welcome-banner {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-banner h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+        }
+
+        .welcome-banner p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            font-size: 1.1rem;
+        }
+
+        .upload-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(148, 163, 184, 0.3);
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.5);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 6px;
+            color: var(--text-primary);
+            margin-top: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Loading Screen Styles */
+        .loading-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        .loading-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .loading-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--neon-blue);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 100px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 255, 0.1));
+        }
+
+        .progress-avatar {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            transition: left 0.5s ease;
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .progress-status {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-percentage {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: rgba(148, 163, 184, 0.2);
+            z-index: -1;
+        }
+
+        .progress-step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            color: var(--text-secondary);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .step-icon.active {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        .step-icon.completed {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .step-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Report Styles */
+        .report-container {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .report-title {
+            font-size: 2rem;
+            color: var(--neon-blue);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.5);
+        }
+
+        .report-section {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--neon-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .metadata-item {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .metadata-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .metadata-value {
+            font-weight: 600;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .result-card {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .result-content {
+            padding: 1rem;
+        }
+
+        .result-source {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-caption {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-url {
+            font-size: 0.8rem;
+            color: var(--neon-blue);
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .result-url:hover {
+            text-decoration: underline;
+        }
+
+        .text-found {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .notification.success {
+            border-left-color: var(--success-color);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger-color);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .modal-footer .btn {
+            width: auto;
+            min-width: 100px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .app-header {
+                padding: 1rem;
+            }
+
+            .auth-card, .avatar-card, .upload-card, .loading-card {
+                padding: 1.5rem;
+            }
+
+            .welcome-banner h1 {
+                font-size: 2rem;
+            }
+
+            .report-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metadata-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-dropdown {
+                min-width: 150px;
+            }
+
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .modal-footer {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <img src="https://i.ibb.co/nN8r7dKn/logo-eyespy.jpg" alt="EyeSpy" class="logo">
+        <div class="splash-logo">EYESPY</div>
+        <div class="splash-subtitle">Discover. Trace. Uncover.</div>
+        <div class="splash-loader"></div>
+        <div class="team-credit">Designed by Team InnovateX</div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container" id="appContainer">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fas fa-eye"></i>
+                <span>EYESPY</span>
+            </div>
+            <div class="user-info" id="userInfo" style="display: none;">
+                <div class="user-menu">
+                    <button class="user-menu-btn" id="userMenuBtn">
+                        <span id="username"></span>
+                        <div class="user-avatar" id="headerAvatar"></div>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <button class="dropdown-item" id="profileBtn">
+                            <i class="fas fa-user"></i>
+                            Profile
+                        </button>
+                        <button class="dropdown-item" id="settingsBtn">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item danger" id="deleteAccountBtn">
+                            <i class="fas fa-trash-alt"></i>
+                            Delete Account
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Authentication Container -->
+        <div class="auth-container" id="authContainer">
+            <div class="auth-card" id="loginCard">
+                <h2 class="auth-title">Login to EYESPY</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#" id="showForgotPassword">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <div class="auth-switch">
+                    Don't have an account? <a href="#" id="showSignup">Sign Up</a>
+                </div>
+            </div>
+
+            <div class="auth-card" id="signupCard" style="display: none;">
+                <h2 class="auth-title">Create an Account</h2>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="signupUsername">Username</label>
+                        <input type="text" id="signupUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                </form>
+                <div class="auth-switch">
+                    Already have an account? <a href="#" id="showLogin">Login</a>
+                </div>
+            </div>
+
+            <div class="auth-card" id="forgotPasswordCard" style="display: none;">
+                <h2 class="auth-title">Reset Password</h2>
+                <div id="resetSuccessMessage" style="display: none;">
+                    <div class="success-message">
+                        <i class="fas fa-check-circle"></i> Password reset link sent to your email!
+                    </div>
+                </div>
+                <form id="forgotPasswordForm">
+                    <div class="form-group">
+                        <label for="resetEmail">Email</label>
+                        <input type="email" id="resetEmail" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Reset Link</button>
+                </form>
+                <button class="btn btn-secondary" id="backToLogin">Back to Login</button>
+            </div>
+        </div>
+
+        <!-- Avatar Creation Container -->
+        <div class="avatar-creation" id="avatarCreation">
+            <div class="avatar-card">
+                <h2 class="avatar-title">Create Your Avatar</h2>
+                <div class="avatar-preview" id="avatarPreview">
+                    <i class="fas fa-user-secret"></i>
+                </div>
+                <div class="avatar-options">
+                    <div class="avatar-option" data-avatar="fa-user-secret">
+                        <i class="fas fa-user-secret"></i>
+                        <div>Cyber Agent</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="fa-microchip">
+                        <i class="fas fa-microchip"></i>
+                        <div>Tech Specialist</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="fa-brain">
+                        <i class="fas fa-brain"></i>
+                        <div>Intelligence Analyst</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="fa-user-shield">
+                        <i class="fas fa-user-shield"></i>
+                        <div>Digital Invigilator</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="fa-running">
+                        <i class="fas fa-running"></i>
+                        <div>Field Operator</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="fa-user-graduate">
+                        <i class="fas fa-user-graduate"></i>
+                        <div>Scholar</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="saveAvatar">Continue to Dashboard</button>
+            </div>
+        </div>
+
+        <!-- Main Interface Container -->
+        <div class="main-container" id="mainContainer">
+            <div class="welcome-banner">
+                <h1 class="neon-title">Welcome to EYESPY</h1>
+                <p>Upload an image to discover its presence and history across the internet</p>
+            </div>
+            <div class="upload-card">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="upload-text">Drag & drop your image here or click to browse</div>
+                    <button class="upload-btn">Select Image</button>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group">
+                    <label for="imageUrl">Or enter image URL:</label>
+                    <input type="text" id="imageUrl" class="url-input" placeholder="https://example.com/image.jpg">
+                </div>
+                <button class="btn btn-primary" id="analyzeBtn" style="display: none;">Analyze Image</button>
+                <div id="imagePreview" style="margin-top: 1rem; display: none;">
+                    <img id="previewImg" style="max-width: 100%; max-height: 200px; border-radius: 4px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen Container -->
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-card">
+                <h2 class="loading-title">Analyzing Your Image</h2>
+                <div class="progress-container">
+                    <div class="progress-track"></div>
+                    <div class="progress-avatar" id="progressAvatar">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                </div>
+                <div class="progress-status" id="progressStatus">Initializing analysis...</div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+                <div class="progress-steps">
+                    <div class="progress-step">
+                        <div class="step-icon" id="step1Icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="step-text">Analyze Image</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-icon" id="step2Icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="step-text">Search Web</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-icon" id="step3Icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="step-text">Compile Report</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Container -->
+        <div class="report-container" id="reportContainer">
+            <div class="report-header">
+                <h2 class="report-title">OSINT Analysis Report</h2>
+                <button class="download-btn" id="downloadPdf">
+                    <i class="fas fa-file-pdf"></i>
+                    Download PDF
+                </button>
+            </div>
+
+            <div class="report-section">
+                <h3 class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    Image Information
+                </h3>
+                <div class="metadata-grid" id="imageMetadata">
+                    <!-- Metadata will be populated here -->
+                </div>
+            </div>
+
+            <div class="report-section" id="exifSection">
+                <h3 class="section-title">
+                    <i class="fas fa-camera"></i>
+                    EXIF Data
+                </h3>
+                <div class="metadata-grid" id="exifData">
+                    <!-- EXIF data will be populated here -->
+                </div>
+            </div>
+
+            <div class="report-section" id="textSection">
+                <h3 class="section-title">
+                    <i class="fas fa-font"></i>
+                    Text Detected (OCR)
+                </h3>
+                <div id="ocrText">
+                    <!-- OCR text will be populated here -->
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h3 class="section-title">
+                    <i class="fas fa-globe"></i>
+                    Web Results
+                </h3>
+                <div class="results-grid" id="webResults">
+                    <!-- Web results will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal" id="deleteAccountModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete Account</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed.</p>
+                <p style="margin-top: 1rem; font-weight: 600; color: var(--danger-color);">This includes:</p>
+                <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                    <li>Your profile information</li>
+                    <li>Your avatar selection</li>
+                    <li>All your analysis history</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                <button class="btn btn-danger" id="confirmDelete">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="notification" id="notification">
+        <div class="notification-title" id="notificationTitle"></div>
+        <div class="notification-message" id="notificationMessage"></div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let selectedAvatar = 'fa-user-secret';
+        let uploadedImage = null;
+        let analysisResults = null;
+
+        // DOM elements
+        const splashScreen = document.getElementById('splashScreen');
+        const appContainer = document.getElementById('appContainer');
+        const authContainer = document.getElementById('authContainer');
+        const avatarCreation = document.getElementById('avatarCreation');
+        const mainContainer = document.getElementById('mainContainer');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const reportContainer = document.getElementById('reportContainer');
+        const userInfo = document.getElementById('userInfo');
+        const username = document.getElementById('username');
+        const headerAvatar = document.getElementById('headerAvatar');
+        const loginCard = document.getElementById('loginCard');
+        const signupCard = document.getElementById('signupCard');
+        const forgotPasswordCard = document.getElementById('forgotPasswordCard');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const showSignup = document.getElementById('showSignup');
+        const showLogin = document.getElementById('showLogin');
+        const showForgotPassword = document.getElementById('showForgotPassword');
+        const backToLogin = document.getElementById('backToLogin');
+        const resetSuccessMessage = document.getElementById('resetSuccessMessage');
+        const avatarPreview = document.getElementById('avatarPreview');
+        const avatarOptions = document.querySelectorAll('.avatar-option');
+        const saveAvatar = document.getElementById('saveAvatar');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const imageUrl = document.getElementById('imageUrl');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const progressAvatar = document.getElementById('progressAvatar');
+        const progressStatus = document.getElementById('progressStatus');
+        const progressPercentage = document.getElementById('progressPercentage');
+        const step1Icon = document.getElementById('step1Icon');
+        const step2Icon = document.getElementById('step2Icon');
+        const step3Icon = document.getElementById('step3Icon');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const downloadPdf = document.getElementById('downloadPdf');
+        const notification = document.getElementById('notification');
+        const notificationTitle = document.getElementById('notificationTitle');
+        const notificationMessage = document.getElementById('notificationMessage');
+        
+        // User menu elements
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userDropdown = document.getElementById('userDropdown');
+        const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+        const profileBtn = document.getElementById('profileBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        
+        // Delete account modal elements
+        const deleteAccountModal = document.getElementById('deleteAccountModal');
+        const modalClose = document.getElementById('modalClose');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const confirmDelete = document.getElementById('confirmDelete');
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show splash screen for 3 seconds
+            setTimeout(() => {
+                splashScreen.style.opacity = '0';
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                    appContainer.style.display = 'flex';
+                    
+                    // Check if user is already logged in
+                    const savedUser = localStorage.getItem('currentUser');
+                    if (savedUser) {
+                        currentUser = JSON.parse(savedUser);
+                        selectedAvatar = currentUser.avatar;
+                        showMainInterface();
+                    } else {
+                        authContainer.style.display = 'flex';
+                    }
+                }, 500);
+            }, 3000);
+
+            // Event listeners
+            showSignup.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginCard.style.display = 'none';
+                forgotPasswordCard.style.display = 'none';
+                signupCard.style.display = 'block';
+            });
+
+            showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                signupCard.style.display = 'none';
+                forgotPasswordCard.style.display = 'none';
+                loginCard.style.display = 'block';
+            });
+
+            showForgotPassword.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginCard.style.display = 'none';
+                signupCard.style.display = 'none';
+                forgotPasswordCard.style.display = 'block';
+                resetSuccessMessage.style.display = 'none';
+            });
+
+            backToLogin.addEventListener('click', () => {
+                forgotPasswordCard.style.display = 'none';
+                loginCard.style.display = 'block';
+            });
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                // Simulate login (in a real app, this would be an API call)
+                const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = savedUsers.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    currentUser = user;
+                    selectedAvatar = user.avatar;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showNotification('success', 'Login Successful', `Welcome back, ${user.username}!`);
+                    showMainInterface();
+                } else {
+                    showNotification('error', 'Login Failed', 'Invalid email or password');
+                }
+            });
+
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('signupUsername').value;
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                
+                // Simulate signup (in a real app, this would be an API call)
+                const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+                
+                if (savedUsers.some(u => u.email === email)) {
+                    showNotification('error', 'Signup Failed', 'Email already in use');
+                    return;
+                }
+                
+                const newUser = {
+                    username,
+                    email,
+                    password,
+                    avatar: 'fa-user-secret'
+                };
+                
+                savedUsers.push(newUser);
+                localStorage.setItem('users', JSON.stringify(savedUsers));
+                
+                currentUser = newUser;
+                selectedAvatar = newUser.avatar;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showNotification('success', 'Account Created', `Welcome to EYESPY, ${username}!`);
+                showAvatarCreation();
+            });
+
+            forgotPasswordForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('resetEmail').value;
+                
+                // Simulate password reset (in a real app, this would send an email)
+                const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+                const userExists = savedUsers.some(u => u.email === email);
+                
+                if (userExists) {
+                    // Show success message
+                    forgotPasswordForm.style.display = 'none';
+                    resetSuccessMessage.style.display = 'block';
+                    
+                    showNotification('success', 'Reset Email Sent', `Password reset link sent to ${email}`);
+                    
+                    // In a real app, this would generate a reset token and send an email
+                    // For demo purposes, we'll just log it
+                    console.log(`Password reset requested for: ${email}`);
+                } else {
+                    showNotification('error', 'Reset Failed', 'No account found with that email');
+                }
+            });
+
+            avatarOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    avatarOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedAvatar = option.dataset.avatar;
+                    avatarPreview.innerHTML = `<i class="fas ${selectedAvatar}"></i>`;
+                });
+            });
+
+            saveAvatar.addEventListener('click', () => {
+                currentUser.avatar = selectedAvatar;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showMainInterface();
+            });
+
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length) {
+                    handleImageUpload(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleImageUpload(e.target.files[0]);
+                }
+            });
+
+            imageUrl.addEventListener('input', () => {
+                if (imageUrl.value.trim() || uploadedImage) {
+                    analyzeBtn.style.display = 'block';
+                } else {
+                    analyzeBtn.style.display = 'none';
+                }
+                if (imageUrl.value.trim()) {
+                    imagePreview.style.display = 'none';
+                    uploadedImage = null;
+                }
+            });
+
+            analyzeBtn.addEventListener('click', () => {
+                if (uploadedImage) {
+                    startAnalysis(uploadedImage);
+                } else if (imageUrl.value.trim()) {
+                    // In a real app, we would fetch the image from the URL
+                    showNotification('warning', 'URL Analysis', 'URL analysis would be implemented in a production version');
+                    // For demo purposes, we'll use a placeholder image
+                    const placeholderImg = new Image();
+                    placeholderImg.crossOrigin = 'Anonymous';
+                    placeholderImg.onload = () => {
+                        startAnalysis(placeholderImg);
+                    };
+                    placeholderImg.onerror = () => {
+                        showNotification('error', 'Invalid URL', 'Could not load image from the provided URL');
+                    };
+                    placeholderImg.src = 'https://picsum.photos/seed/eyespy/800/600.jpg';
+                }
+            });
+
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('currentUser');
+                currentUser = null;
+                selectedAvatar = 'fa-user-secret';
+                authContainer.style.display = 'flex';
+                mainContainer.style.display = 'none';
+                userInfo.style.display = 'none';
+                userDropdown.classList.remove('show');
+                showNotification('success', 'Logged Out', 'You have been successfully logged out');
+            });
+
+            downloadPdf.addEventListener('click', () => {
+                // In a real app, this would generate a PDF report
+                showNotification('success', 'PDF Generated', 'Your report has been downloaded');
+                
+                // For demo purposes, we'll create a simple text representation
+                const reportText = generateReportText();
+                const blob = new Blob([reportText], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'EYESPY_Report.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+
+            // User menu event listeners
+            userMenuBtn.addEventListener('click', () => {
+                userDropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                    userDropdown.classList.remove('show');
+                }
+            });
+
+            profileBtn.addEventListener('click', () => {
+                userDropdown.classList.remove('show');
+                showNotification('info', 'Profile', 'Profile feature coming soon!');
+            });
+
+            settingsBtn.addEventListener('click', () => {
+                userDropdown.classList.remove('show');
+                showNotification('info', 'Settings', 'Settings feature coming soon!');
+            });
+
+            deleteAccountBtn.addEventListener('click', () => {
+                userDropdown.classList.remove('show');
+                deleteAccountModal.classList.add('show');
+            });
+
+            // Modal event listeners
+            modalClose.addEventListener('click', () => {
+                deleteAccountModal.classList.remove('show');
+            });
+
+            cancelDelete.addEventListener('click', () => {
+                deleteAccountModal.classList.remove('show');
+            });
+
+            confirmDelete.addEventListener('click', () => {
+                deleteAccount();
+            });
+
+            // Close modal when clicking outside
+            deleteAccountModal.addEventListener('click', (e) => {
+                if (e.target === deleteAccountModal) {
+                    deleteAccountModal.classList.remove('show');
+                }
+            });
+        });
+
+        // Helper functions
+        function showMainInterface() {
+            authContainer.style.display = 'none';
+            avatarCreation.style.display = 'none';
+            mainContainer.style.display = 'flex';
+            userInfo.style.display = 'flex';
+            username.textContent = currentUser.username;
+            headerAvatar.innerHTML = `<i class="fas ${currentUser.avatar}"></i>`;
+        }
+
+        function showAvatarCreation() {
+            authContainer.style.display = 'none';
+            avatarCreation.style.display = 'flex';
+            avatarPreview.innerHTML = `<i class="fas ${selectedAvatar}"></i>`;
+            avatarOptions.forEach(option => {
+                if (option.dataset.avatar === selectedAvatar) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+
+        function handleImageUpload(file) {
+            if (!file.type.match('image.*')) {
+                showNotification('error', 'Invalid File', 'Please upload an image file');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                uploadedImage = new Image();
+                uploadedImage.onload = () => {
+                    previewImg.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    analyzeBtn.style.display = 'block';
+                    imageUrl.value = '';
+                };
+                uploadedImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function startAnalysis(image) {
+            mainContainer.style.display = 'none';
+            loadingScreen.style.display = 'flex';
+            
+            // Set up the progress avatar
+            progressAvatar.innerHTML = `<i class="fas ${currentUser.avatar}"></i>`;
+            progressAvatar.style.left = '0px';
+            progressPercentage.textContent = '0%';
+            progressStatus.textContent = 'Initializing analysis...';
+            
+            // Reset step icons
+            step1Icon.classList.remove('active', 'completed');
+            step2Icon.classList.remove('active', 'completed');
+            step3Icon.classList.remove('active', 'completed');
+            
+            // Simulate analysis process
+            simulateAnalysis(image);
+        }
+
+        function simulateAnalysis(image) {
+            // Step 1: Analyze Image (0-33%)
+            step1Icon.classList.add('active');
+            updateProgress(0, 33, 'Analyzing image...', () => {
+                step1Icon.classList.remove('active');
+                step1Icon.classList.add('completed');
+                
+                // Step 2: Search Web (33-66%)
+                step2Icon.classList.add('active');
+                updateProgress(33, 66, 'Searching the web...', () => {
+                    step2Icon.classList.remove('active');
+                    step2Icon.classList.add('completed');
+                    
+                    // Step 3: Compile Report (66-100%)
+                    step3Icon.classList.add('active');
+                    updateProgress(66, 100, 'Compiling report...', () => {
+                        step3Icon.classList.remove('active');
+                        step3Icon.classList.add('completed');
+                        
+                        // Generate mock results
+                        generateMockResults(image);
+                        
+                        // Show report
+                        loadingScreen.style.display = 'none';
+                        reportContainer.style.display = 'flex';
+                        showNotification('success', 'Analysis Complete', 'Your image has been successfully analyzed');
+                    });
+                });
+            });
+        }
+
+        function updateProgress(start, end, status, callback) {
+            const duration = 2000; // 2 seconds per step
+            const interval = 50; // Update every 50ms
+            const increment = (end - start) / (duration / interval);
+            let current = start;
+            
+            const progressInterval = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(progressInterval);
+                    callback();
+                }
+                
+                const percentage = Math.round(current);
+                progressPercentage.textContent = `${percentage}%`;
+                progressStatus.textContent = status;
+                
+                // Update avatar position
+                const maxPosition = document.querySelector('.progress-container').offsetWidth - 60; // 60px is avatar width
+                const position = (percentage / 100) * maxPosition;
+                progressAvatar.style.left = `${position}px`;
+            }, interval);
+        }
+
+        function generateMockResults(image) {
+            // Generate mock metadata
+            const metadata = [
+                { label: 'Filename', value: 'uploaded_image.jpg' },
+                { label: 'File Size', value: '1.2 MB' },
+                { label: 'Dimensions', value: `${image.width} × ${image.height} pixels` },
+                { label: 'File Type', value: 'JPEG' },
+                { label: 'Color Space', value: 'RGB' },
+                { label: 'Upload Date', value: new Date().toLocaleDateString() }
+            ];
+            
+            const metadataHtml = metadata.map(item => `
+                <div class="metadata-item">
+                    <div class="metadata-label">${item.label}</div>
+                    <div class="metadata-value">${item.value}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('imageMetadata').innerHTML = metadataHtml;
+            
+            // Generate mock EXIF data
+            const exifData = [
+                { label: 'Camera Make', value: 'Canon' },
+                { label: 'Camera Model', value: 'EOS 5D Mark IV' },
+                { label: 'Focal Length', value: '50mm' },
+                { label: 'Aperture', value: 'f/1.8' },
+                { label: 'Shutter Speed', value: '1/250s' },
+                { label: 'ISO', value: '100' },
+                { label: 'Date Taken', value: '2023-05-15 14:30:22' },
+                { label: 'GPS Coordinates', value: '40.7128° N, 74.0060° W' }
+            ];
+            
+            const exifHtml = exifData.map(item => `
+                <div class="metadata-item">
+                    <div class="metadata-label">${item.label}</div>
+                    <div class="metadata-value">${item.value}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('exifData').innerHTML = exifHtml;
+            
+            // Generate mock OCR text
+            const ocrText = "Sample text detected in image:\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.";
+            
+            document.getElementById('ocrText').innerHTML = `<div class="text-found">${ocrText}</div>`;
+            
+            // Generate mock web results
+            const webResults = [
+                {
+                    source: 'Instagram',
+                    sourceIcon: 'fab fa-instagram',
+                    title: 'Beautiful sunset at the beach',
+                    caption: 'Amazing view from my vacation! #sunset #beach #vacation',
+                    url: 'https://www.instagram.com/p/ABC123/',
+                    image: 'https://picsum.photos/seed/eyespy1/400/300.jpg'
+                },
+                {
+                    source: 'Twitter',
+                    sourceIcon: 'fab fa-twitter',
+                    title: 'Just captured this moment',
+                    caption: 'Nature is beautiful #photography #nature',
+                    url: 'https://twitter.com/user/status/123456789',
+                    image: 'https://picsum.photos/seed/eyespy2/400/300.jpg'
+                },
+                {
+                    source: 'Facebook',
+                    sourceIcon: 'fab fa-facebook',
+                    title: 'Summer memories',
+                    caption: 'Had a great time with friends at the beach last weekend!',
+                    url: 'https://www.facebook.com/user/posts/123456789',
+                    image: 'https://picsum.photos/seed/eyespy3/400/300.jpg'
+                },
+                {
+                    source: 'Reddit',
+                    sourceIcon: 'fab fa-reddit',
+                    title: 'Check out this photo I took',
+                    caption: 'What do you guys think? I\'m still learning photography.',
+                    url: 'https://www.reddit.com/r/photography/comments/abc123',
+                    image: 'https://picsum.photos/seed/eyespy4/400/300.jpg'
+                },
+                {
+                    source: 'Flickr',
+                    sourceIcon: 'fab fa-flickr',
+                    title: 'Beach Sunset',
+                    caption: 'Taken with my new camera. C&C welcome!',
+                    url: 'https://www.flickr.com/photos/user/123456789',
+                    image: 'https://picsum.photos/seed/eyespy5/400/300.jpg'
+                },
+                {
+                    source: 'Pinterest',
+                    sourceIcon: 'fab fa-pinterest',
+                    title: 'Beach Vibes',
+                    caption: 'Perfect sunset for a perfect day',
+                    url: 'https://www.pinterest.com/pin/123456789/',
+                    image: 'https://picsum.photos/seed/eyespy6/400/300.jpg'
+                }
+            ];
+            
+            const resultsHtml = webResults.map(result => `
+                <div class="result-card">
+                    <img src="${result.image}" alt="${result.title}" class="result-image">
+                    <div class="result-content">
+                        <div class="result-source">
+                            <i class="${result.sourceIcon}"></i>
+                            ${result.source}
+                        </div>
+                        <div class="result-title">${result.title}</div>
+                        <div class="result-caption">${result.caption}</div>
+                        <a href="${result.url}" target="_blank" class="result-url">${result.url}</a>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('webResults').innerHTML = resultsHtml;
+            
+            // Store results for PDF generation
+            analysisResults = {
+                metadata,
+                exifData,
+                ocrText,
+                webResults
+            };
+        }
+
+        function generateReportText() {
+            if (!analysisResults) return 'No analysis results available';
+            
+            let report = 'EYESPY ANALYSIS REPORT\n';
+            report += '=====================\n\n';
+            
+            report += 'IMAGE INFORMATION\n';
+            report += '-----------------\n';
+            analysisResults.metadata.forEach(item => {
+                report += `${item.label}: ${item.value}\n`;
+            });
+            
+            report += '\nEXIF DATA\n';
+            report += '---------\n';
+            analysisResults.exifData.forEach(item => {
+                report += `${item.label}: ${item.value}\n`;
+            });
+            
+            report += '\nTEXT DETECTED (OCR)\n';
+            report += '-------------------\n';
+            report += analysisResults.ocrText;
+            
+            report += '\n\nWEB RESULTS\n';
+            report += '-----------\n';
+            analysisResults.webResults.forEach((result, index) => {
+                report += `\nResult ${index + 1}:\n`;
+                report += `Source: ${result.source}\n`;
+                report += `Title: ${result.title}\n`;
+                report += `Caption: ${result.caption}\n`;
+                report += `URL: ${result.url}\n`;
+            });
+            
+            report += '\n\nGenerated by EYESPY on ' + new Date().toLocaleString();
+            
+            return report;
+        }
+
+        function deleteAccount() {
+            // Close the modal
+            deleteAccountModal.classList.remove('show');
+            
+            // Get the current user's email
+            const userEmail = currentUser.email;
+            
+            // Remove user from users array in localStorage
+            const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+            const updatedUsers = savedUsers.filter(user => user.email !== userEmail);
+            localStorage.setItem('users', JSON.stringify(updatedUsers));
+            
+            // Remove current user from localStorage
+            localStorage.removeItem('currentUser');
+            
+            // Reset global variables
+            currentUser = null;
+            selectedAvatar = 'fa-user-secret';
+            
+            // Show login screen
+            authContainer.style.display = 'flex';
+            mainContainer.style.display = 'none';
+            userInfo.style.display = 'none';
+            
+            // Show notification
+            showNotification('success', 'Account Deleted', 'Your account has been permanently deleted');
+            
+            // Clear login form
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function showNotification(type, title, message) {
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notificationTitle.textContent = title;
+            notificationMessage.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
